@@ -9,14 +9,14 @@ const Login = () => {
           <Input
             type="email"
             autoComplete="email"
-            placeholder="email@admin.com"
+            placeholder="email@admin.com*"
           // onChange={onChange}
           // value={email}
           />
           <Input
             type="password"
             autoComplete="new-password"
-            placeholder="password"
+            placeholder="password*"
           // onChange={onChange}
           // value={email}
           />
@@ -85,6 +85,7 @@ const LinkAnchor = styled.a`
   position: relative;
   font-size: 15px;
   text-decoration: none;
+  cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   &:hover {
     color: ${props => props.register ? "rgba(28,100,242,.6)" : " #1d1d1f"};
