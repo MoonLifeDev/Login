@@ -80,14 +80,14 @@ const LinkList = styled.div`
   margin: 16px 0 10px 0;
 `;
 const LinkAnchor = styled.a`
-  color: ${props => props.register ? "rgba(28,100,242,1)" : "#1d1d1f"};
+  color: ${props => props.register ? "rgba(28,100,242,1)" : "rgba(107, 114, 128, 1)"};
   border-bottom: ${props => props.register ? "1px solid rgba(28,100,242)" : "0"};
   position: relative;
   font-size: 15px;
   text-decoration: none;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   &:hover {
-    color: ${props => props.register ? "rgba(28,100,242,.6)" : "rgba(107, 114, 128, 1)"};
+    color: ${props => props.register ? "rgba(28,100,242,.6)" : " #1d1d1f"};
     border-bottom: ${props => props.register ? "1px solid rgba(28,100,242,.6)" : "0"};
   }
 `;
