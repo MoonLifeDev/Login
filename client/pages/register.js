@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -56,44 +56,42 @@ export const useInput = (initValue = null) => {
 const Register = () => {
   const classes = useStyles();
 
-  const [passwordCheck, setPasswordCheck] = useState('');
   const [term, setTerm] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [termError, setTermError] = useState(false);
+  const [error, setError] = useState(null);
 
   const [userName, onChangeUserName] = useInput('');
   const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
+  const [passwordCheck, onChangePasswordCheck] = useInput('');
 
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
+      if ([userName, email, password, passwordCheck].includes('')) {
+        setError('빈 칸을 모두 입력하세요.');
+        return;
+      }
       if (password !== passwordCheck) {
-        return setPasswordError(true);
+        return setError('패스워드가 일치하지 않습니다.');
       }
       if (!term) {
-        return setTermError(true);
+        return setError('약관에 동의하셔야 합니다.');
       }
     },
-    [term, password, passwordCheck]
-  );
-
-  const onChangePasswordCheck = useCallback(
-    (e) => {
-      setPasswordError(e.target.value !== password);
-      setPasswordCheck(e.target.value);
-    },
-    [password, passwordCheck, passwordError]
+    [term, password, error]
   );
 
   const onChangeTerm = useCallback(
     (e) => {
-      setTermError(false);
       setTerm(e.target.checked);
-      console.log(term);
     },
-    [term, termError]
+    [term]
   );
+
+  useEffect(() => {
+    // 인풋에 입력될때마다, setError(null)로 바꿔서 에러메시지를 가려줌
+    setError(null);
+  }, [term, userName, email, password, passwordCheck]);
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -110,7 +108,6 @@ const Register = () => {
                 variant='outlined'
                 required
                 fullWidth
-                id='name'
                 label='User Name'
                 name='name'
                 autoComplete='name'
@@ -123,7 +120,6 @@ const Register = () => {
                 variant='outlined'
                 required
                 fullWidth
-                id='email'
                 label='Email Address'
                 name='email'
                 autoComplete='email'
@@ -140,7 +136,6 @@ const Register = () => {
                 name='password'
                 label='Password'
                 type='password'
-                id='password'
                 autoComplete='current-password'
                 value={password}
                 onChange={onChangePassword}
@@ -149,23 +144,16 @@ const Register = () => {
 
             <Grid item xs={12}>
               <TextField
-                error={passwordError}
                 variant='outlined'
                 required
                 fullWidth
                 name='passwordCheck'
                 label='PasswordCheck'
                 type='password'
-                id='password'
                 autoComplete='current-password'
                 value={passwordCheck}
                 onChange={onChangePasswordCheck}
               />
-              {passwordError && (
-                <div style={{ color: 'red' }}>
-                  비밀번호가 일치하지 않습니다.
-                </div>
-              )}
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
@@ -179,9 +167,7 @@ const Register = () => {
                 }
                 label='개발 공부를 열심히 수행할 것을 약속합니다.'
               />
-              {termError && (
-                <div style={{ color: 'red' }}>약관에 동의하셔야 합니다.</div>
-              )}
+              {error && <div style={{ color: 'red' }}>{error}</div>}
             </Grid>
           </Grid>
           <Button
