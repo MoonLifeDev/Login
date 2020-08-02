@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,6 +11,10 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
+// stores
+import { observer } from 'mobx-react-lite';
+import RegisterStore from 'stores/Register';
 
 const Copyright = () => {
   return (
@@ -53,46 +57,45 @@ export const useInput = (initValue = null) => {
   return [value, handler];
 };
 
-const Register = () => {
+const Register = observer(() => {
+  const registerStore = useContext(RegisterStore);
+
   const classes = useStyles();
 
   const [term, setTerm] = useState(false);
   const [error, setError] = useState(null);
 
-  const [userName, onChangeUserName] = useInput('');
-  const [email, onChangeEmail] = useInput('');
-  const [password, onChangePassword] = useInput('');
-  const [passwordCheck, onChangePasswordCheck] = useInput('');
+  // const [userName, onChangeUserName] = useInput('');
+  // const [email, onChangeEmail] = useInput('');
+  // const [password, onChangePassword] = useInput('');
+  // const [passwordCheck, onChangePasswordCheck] = useInput('');
 
-  const onSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      if ([userName, email, password, passwordCheck].includes('')) {
-        setError('빈 칸을 모두 입력하세요.');
-        return;
-      }
-      if (password !== passwordCheck) {
-        return setError('패스워드가 일치하지 않습니다.');
-      }
-      if (!term) {
-        return setError('약관에 동의하셔야 합니다.');
-      }
+  const onSubmit = (e) => {
+    e.preventDefault();
+    // if ([userName, email, password, passwordCheck].includes('')) {
+    //   setError('빈 칸을 모두 입력하세요.');
+    //   return;
+    // }
+    // if (password !== passwordCheck) {
+    //   return setError('패스워드가 일치하지 않습니다.');
+    // }
+    if (!term) {
+      return setError('약관에 동의하셔야 합니다.');
+    }
 
-      console.log(
-        'userName:',
-        userName,
-        'email:',
-        email,
-        'password:',
-        password,
-        'passwordCheck:',
-        passwordCheck,
-        'term:',
-        term
-      );
-    },
-    [term, password, error]
-  );
+    console.log(
+      'userName:',
+      registerStore.name,
+      'email:',
+      registerStore.email,
+      'password:',
+      registerStore.password,
+      'passwordCheck:',
+      registerStore.passwordCheck,
+      'term:',
+      term
+    );
+  };
 
   const onChangeTerm = useCallback(
     (e) => {
@@ -101,10 +104,10 @@ const Register = () => {
     [term]
   );
 
-  useEffect(() => {
-    // 인풋에 입력될때마다, setError(null)로 바꿔서 에러메시지를 가려줌
-    setError(null);
-  }, [term, userName, email, password, passwordCheck]);
+  // useEffect(() => {
+  //   // 인풋에 입력될때마다, setError(null)로 바꿔서 에러메시지를 가려줌
+  //   setError(null);
+  // }, [term, userName, email, password, passwordCheck]);
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -124,8 +127,8 @@ const Register = () => {
                 label='User Name'
                 name='name'
                 autoComplete='name'
-                value={userName}
-                onChange={onChangeUserName}
+                value={registerStore.userName}
+                onChange={registerStore.onChangeHandler}
               />
             </Grid>
             <Grid item xs={12}>
@@ -136,8 +139,8 @@ const Register = () => {
                 label='Email Address'
                 name='email'
                 autoComplete='email'
-                value={email}
-                onChange={onChangeEmail}
+                value={registerStore.email}
+                onChange={registerStore.onChangeHandler}
               />
             </Grid>
 
@@ -150,8 +153,8 @@ const Register = () => {
                 label='Password'
                 type='password'
                 autoComplete='current-password'
-                value={password}
-                onChange={onChangePassword}
+                value={registerStore.password}
+                onChange={registerStore.onChangeHandler}
               />
             </Grid>
 
@@ -164,8 +167,8 @@ const Register = () => {
                 label='PasswordCheck'
                 type='password'
                 autoComplete='current-password'
-                value={passwordCheck}
-                onChange={onChangePasswordCheck}
+                value={registerStore.passwordCheck}
+                onChange={registerStore.onChangeHandler}
               />
             </Grid>
             <Grid item xs={12}>
@@ -206,6 +209,6 @@ const Register = () => {
       </Box>
     </Container>
   );
-};
+});
 
 export default Register;
