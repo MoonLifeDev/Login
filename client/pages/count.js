@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
-import Container from "components/Container";
-import Button from "components/Button";
-import * as Text from "components/Text";
+import Container from 'components/Container';
+import Button from 'components/Button';
+import * as Text from 'components/Text';
 
 // stores
-import { observer } from "mobx-react-lite";
-import CountStore from "stores/Count";
+import { observer } from 'mobx-react-lite';
+import CountStore from 'stores/Count';
 
 const CountPage = observer(() => {
   const countStore = useContext(CountStore);
