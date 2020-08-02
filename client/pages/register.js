@@ -77,6 +77,19 @@ const Register = () => {
       if (!term) {
         return setError('약관에 동의하셔야 합니다.');
       }
+
+      console.log(
+        'userName:',
+        userName,
+        'email:',
+        email,
+        'password:',
+        password,
+        'passwordCheck:',
+        passwordCheck,
+        'term:',
+        term
+      );
     },
     [term, password, error]
   );
